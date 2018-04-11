@@ -32,15 +32,15 @@
 #include "meta.h"
 
 // There is no "_ctx" equivalent in gcrypt.
-TGLC_WRAPPER_ASSOC(bn_ctx,int)
+TGLC_WRAPPER_ASSOC(bn_ctx_t,int)
 TGLC_WRAPPER_ASSOC(bn,struct gcry_mpi)
 
-TGLC_bn_ctx *TGLC_bn_ctx_new (void) {
+TGLC_bn_ctx_t *TGLC_bn_ctx_new (void) {
   /* Must not be the null pointer, but must never be dereferenced. Assume that "1" is an invalid address. */
   return ((void *)1);
 }
 
-void TGLC_bn_ctx_free (TGLC_bn_ctx* ctx) {
+void TGLC_bn_ctx_free (TGLC_bn_ctx_t* ctx) {
   (void) ctx;
 }
 
@@ -65,7 +65,7 @@ int TGLC_bn_cmp (const TGLC_bn *a, const TGLC_bn *b) {
   return gcry_mpi_cmp (unwrap_bn (a), unwrap_bn (b));
 }
 
-int TGLC_bn_is_prime (const TGLC_bn *a, int checks, void (*callback) (int, int, void *), TGLC_bn_ctx *ctx, void *cb_arg) {
+int TGLC_bn_is_prime (const TGLC_bn *a, int checks, void (*callback) (int, int, void *), TGLC_bn_ctx_t *ctx, void *cb_arg) {
   assert (0 == checks);
   assert (NULL == callback);
   (void) ctx;
@@ -131,13 +131,13 @@ void TGLC_bn_sub (TGLC_bn *r, const TGLC_bn *a, const TGLC_bn *b) {
   gcry_mpi_sub (unwrap_bn (r), unwrap_bn (a), unwrap_bn (b));
 }
 
-int TGLC_bn_div (TGLC_bn *dv, TGLC_bn *rem, const TGLC_bn *a, const TGLC_bn *d, TGLC_bn_ctx *ctx) {
+int TGLC_bn_div (TGLC_bn *dv, TGLC_bn *rem, const TGLC_bn *a, const TGLC_bn *d, TGLC_bn_ctx_t *ctx) {
   (void) ctx;
   gcry_mpi_div (unwrap_bn (dv), unwrap_bn (rem), unwrap_bn (a), unwrap_bn (d), 0);
   return 1;
 }
 
-int TGLC_bn_mod_exp (TGLC_bn *r, const TGLC_bn *a, const TGLC_bn *p, const TGLC_bn *m, TGLC_bn_ctx *ctx) {
+int TGLC_bn_mod_exp (TGLC_bn *r, const TGLC_bn *a, const TGLC_bn *p, const TGLC_bn *m, TGLC_bn_ctx_t *ctx) {
   (void) ctx;
   gcry_mpi_powm (unwrap_bn (r), unwrap_bn (a), unwrap_bn (p), unwrap_bn (m));
   return 1;

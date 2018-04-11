@@ -210,7 +210,7 @@ struct tgl_state {
   long long rsa_key_fingerprint[TGL_MAX_RSA_KEYS_NUM];
   int rsa_key_num;
 
-  TGLC_bn_ctx *TGLC_bn_ctx;
+  TGLC_bn_ctx_t *TGLC_bn_ctx;
 
   struct tgl_allocator *allocator;
 

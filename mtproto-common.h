@@ -121,7 +121,7 @@ struct encrypted_message {
 
 #pragma pack(pop)
 
-//TGLC_bn_ctx *bn_ctx;
+//TGLC_bn_ctx_t *bn_ctx;
 
 void tgl_prng_seed (struct tgl_state *TLS, const char *password_filename, int password_length);
 int tgl_serialize_bignum (TGLC_bn *b, char *buffer, int maxlen);

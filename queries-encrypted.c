@@ -525,7 +525,7 @@ static struct query_methods send_encr_request_methods  = {
 //int encr_root;
 //unsigned char *encr_prime;
 //int encr_param_version;
-//static TGLC_bn_ctx *ctx;
+//static TGLC_bn_ctx_t *ctx;
 
 void tgl_do_send_accept_encr_chat (struct tgl_state *TLS, struct tgl_secret_chat *E, unsigned char *random, void (*callback)(struct tgl_state *TLS,void *callback_extra, int success, struct tgl_secret_chat *E), void *callback_extra) {
   int i;
