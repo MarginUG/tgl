@@ -66,6 +66,9 @@
 
 #include "mtproto-common.h"
 
+// TODO: remove internal header file
+#include "tgl-net-inner.h"
+
 #define MAX_NET_RES        (1L << 16)
 //extern int log_level;
 
@@ -971,7 +974,7 @@ static int rpc_execute_answer (struct tgl_state *TLS, struct connection *c, long
   return 0;
 }
 
-static struct mtproto_methods mtproto_methods;
+static struct mtproto_methods_t mtproto_methods;
 void tgls_free_session (struct tgl_state *TLS, struct tgl_session *S);
 /*
 static char *get_ipv6 (struct tgl_state *TLS, int num) {
@@ -1018,10 +1021,16 @@ static char *get_ipv6 (struct tgl_state *TLS, int num) {
 static void create_session_connect (struct tgl_state *TLS, struct tgl_session *S) {
   struct tgl_dc *DC = S->dc;
 
+  struct mtproto_methods_t * methods =  &mtproto_methods;
+  
   if (TLS->ipv6_enabled) {
-    S->c = TLS->net_methods->create_connection (TLS, DC->options[1]->ip, DC->options[1]->port, S, DC, &mtproto_methods);
+    S->c = TLS->net_methods->create_connection (TLS, DC->options[1]->ip, DC->options[1]->port, S, DC, methods);
   } else {
-    S->c = TLS->net_methods->create_connection (TLS, DC->options[0]->ip, DC->options[0]->port, S, DC, &mtproto_methods);
+    char * ip = DC->options[0]->ip;
+    int port = DC->options[0]->port;
+    struct tgl_net_methods * net_methods = TLS->net_methods;
+    S->c = net_methods->create_connection (TLS, ip, port, S, DC, methods);
+    //S->c = tgln_create_connection(TLS, ip, port, S, DC, methods);
   }
 }
 
@@ -1209,7 +1218,7 @@ static void mpc_on_get_config (struct tgl_state *TLS, void *extra, int success) 
 }
 
 static int tc_becomes_ready (struct tgl_state *TLS, struct connection *c) {
-  vlogprintf (E_NOTICE, "outbound rpc connection from dc #%d becomed ready\n", TLS->net_methods->get_dc(c)->id);
+  vlogprintf (E_NOTICE, "outbound rpc connection from dc #%d became ready\n", TLS->net_methods->get_dc(c)->id);
   //char byte = 0xef;
   //assert (TLS->net_methods->write_out (c, &byte, 1) == 1);
   //TLS->net_methods->flush_out (c);
@@ -1382,7 +1391,7 @@ struct tgl_dc *tglmp_alloc_dc (struct tgl_state *TLS, int flags, int id, char *i
   return DC;
 }
 
-static struct mtproto_methods mtproto_methods = {
+static struct mtproto_methods_t mtproto_methods = {
   .execute = rpc_execute,
   .ready = rpc_becomes_ready,
   .close = rpc_close

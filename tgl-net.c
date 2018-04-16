@@ -41,6 +41,7 @@
 #ifdef EVENT_V2
 #include <event2/event.h>
 #else
+#warning "using old libevent"
 #include <event.h>
 #include "event-old.h"
 #endif
@@ -313,7 +314,7 @@ static int my_connect (struct connection *c, const char *host) {
   return fd;
 }
 
-struct connection *tgln_create_connection (struct tgl_state *TLS, const char *host, int port, struct tgl_session *session, struct tgl_dc *dc, struct mtproto_methods *methods) {
+struct connection *tgln_create_connection (struct tgl_state *TLS, const char *host, int port, struct tgl_session *session, struct tgl_dc *dc, struct mtproto_methods_t *methods) {
   struct connection *c = talloc0 (sizeof (*c));
   c->TLS = TLS;
   c->ip = tstrdup (host);

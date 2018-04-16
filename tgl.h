@@ -52,7 +52,7 @@
 #define TGL_SCHEME_LAYER 45
 
 struct connection;
-struct mtproto_methods;
+struct mtproto_methods_t;
 struct tgl_session;
 struct tgl_dc;
 
@@ -132,10 +132,10 @@ struct tgl_net_methods {
   struct tgl_dc *(*get_dc) (struct connection *c);
   struct tgl_session *(*get_session) (struct connection *c);
 
-  struct connection *(*create_connection) (struct tgl_state *TLS, const char *host, int port, struct tgl_session *session, struct tgl_dc *dc, struct mtproto_methods *methods);
+  struct connection *(*create_connection) (struct tgl_state *TLS, const char *host, int port, struct tgl_session *session, struct tgl_dc *dc, struct mtproto_methods_t *methods);
 };
 
-struct mtproto_methods {
+struct mtproto_methods_t {
   int (*ready) (struct tgl_state *TLS, struct connection *c);
   int (*close) (struct tgl_state *TLS, struct connection *c);
   int (*execute) (struct tgl_state *TLS, struct connection *c, int op, int len);

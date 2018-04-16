@@ -10,8 +10,9 @@
 #define BEV_EVENT_ERROR EVBUFFER_ERROR
 #define BEV_EVENT_TIMEOUT EVBUFFER_TIMEOUT
 
-typedef int evutil_socket_t;
-  
+//typedef int evutil_socket_t;
+#define evutil_socket_t int
+
 static inline struct event *event_new (struct event_base *base, int fd, int what, void(*callback)(int, short, void *), void *arg) __attribute__ ((unused));
 static inline struct event *event_new (struct event_base *base, int fd, int what, void(*callback)(int, short, void *), void *arg) {
   struct event *ev = malloc (sizeof (*ev));  
